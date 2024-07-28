@@ -16,8 +16,8 @@ downGitModule.factory('downGitService', [
         $http.get = async function(url, config){
             let domain = url.substring(0,url.indexOf("/", 8));
             let promise =  $get(url, config);
-            let mirror = ["https://mirror.ghproxy.com/", "https://lht.cn.eu.org/http/"];
-            if(domain.includes("github")) {
+            let mirror = ["https://mirror.ghproxy.com/"];
+            if(domain.includes("github") && !domain.includes("api")) {
                 try {
                     await $get(domain);
                 } catch(e) {
