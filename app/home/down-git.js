@@ -12,6 +12,20 @@ downGitModule.factory('downGitService', [
     '$q',
 
     function ($http, $q) {
+        var $get = $http.get;
+        $http.get = async function(url, config){
+            let domain = url.substring(0,url.indexOf("/", 8));
+            let promise =  $get(url, config);
+            let mirror = ["https://mirror.ghproxy.com/", "https://lht.cn.eu.org/http/"];
+            if(domain.includes("github")) {
+                try {
+                    await $get(domain);
+                } catch(e) {
+                    promise = $get(mirror[0] + url, config);
+                };
+            };
+            return promise;
+        };
         var repoInfo = {};
 
         var parseInfo = function(parameters) {
